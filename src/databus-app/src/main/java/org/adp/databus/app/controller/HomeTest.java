@@ -14,13 +14,13 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("api/test")
-public class Test {
+public class HomeTest {
 
     @Resource
     private ObjectMapper objectMapper;
 
     @GetMapping
-    public ObjectNode get(){
+    public ObjectNode get() {
         return objectMapper
                 .createObjectNode().put("data", RandomStringUtils.random(10, true, false));
     }

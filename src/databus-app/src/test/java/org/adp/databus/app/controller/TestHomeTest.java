@@ -12,18 +12,24 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.HeaderResultMatchers;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasToString;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class TestTest {
+public class TestHomeTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -33,7 +39,7 @@ public class TestTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         //使用上下文构建mockMvc
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
@@ -47,6 +53,7 @@ public class TestTest {
                                     .accept(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.log())
                     .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
             final MockHttpServletResponse response = mvcResult.getResponse();
@@ -55,6 +62,30 @@ public class TestTest {
             assertTrue(jsonNode.has("data"));
             assertTrue(jsonNode.path("data").isTextual());
             assertEquals(jsonNode.path("data").asText().length(), 10);
+        });
+    }
+
+    @Test()
+    public void testCors() {
+        assertNotNull(mockMvc, "Spring Context not null");
+        String origin = "http://localhost:4200";
+        assertDoesNotThrow(() -> {
+            final MvcResult mvcResult = mockMvc.perform(
+                            MockMvcRequestBuilders.options("/api/test")
+                                    .header("Access-Control-Request-Method", "GET")
+                                    .header("Origin", origin)
+                                    .header("Referer", origin)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.header().string("Access-Control-Allow-Origin", origin))
+                    .andExpect(MockMvcResultMatchers.header().exists("Access-Control-Allow-Methods"))
+                    .andExpect(MockMvcResultMatchers.header().string("Access-Control-Allow-Credentials", "true"))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    .andReturn();
+            String headers = mvcResult.getResponse().getHeader("Access-Control-Allow-Methods");
+            assertNotNull(headers);
+            assertTrue(headers.contains("GET"));
         });
     }
 }
