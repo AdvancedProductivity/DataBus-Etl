@@ -14,6 +14,16 @@ import {NgProgressModule} from "ngx-progressbar";
 import {NgProgressHttpModule} from "ngx-progressbar/http";
 import {NgProgressRouterModule} from "ngx-progressbar/router";
 import {MatTabsModule} from '@angular/material/tabs';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {MatMenuModule} from "@angular/material/menu";
+
+// AoT requires an exported function for factories
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 
 @NgModule({
   imports: [
@@ -21,8 +31,17 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatMenuModule,
     LayoutModule,
+    HttpClientModule,
     MatToolbarModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    }),
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
@@ -37,7 +56,10 @@ import {MatTabsModule} from '@angular/material/tabs';
   declarations: [],
   exports: [
     CommonModule,
+    MatMenuModule,
+    HttpClientModule,
     MatButtonModule,
+    TranslateModule,
     MatIconModule,
     MatToolbarModule,
     LayoutModule,

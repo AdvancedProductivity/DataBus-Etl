@@ -9,7 +9,7 @@
            routerLink="task"
            routerLinkActive="ssetectd"
         >
-          Task
+          {{ 'taskMenu' | translate}}
         </a>
         <a mat-tab-link
            (click)="gotoPage('plugin')"
@@ -17,11 +17,32 @@
            routerLinkActive="ssetectd"
            routerLink="plugin"
         >
-          Plugin
+          {{ 'pluginMenu' | translate}}
         </a>
       </nav>
-      <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">favorite</mat-icon>
-      <mat-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>language</mat-icon>
+      </button>
+      <mat-icon
+        class="example-icon"
+        aria-hidden="false"
+        aria-label="Example delete icon"
+      >
+        notifications
+      </mat-icon>
+      <mat-menu #menu="matMenu">
+        <button (click)="changeLanguage(false)" mat-menu-item>
+          <span>{{ 'en' | translate}}</span>
+        </button>
+        <button (click)="changeLanguage(true)" mat-menu-item>
+          <span>{{ 'zh' | translate}}</span>
+        </button>
+      </mat-menu>
+      <a mat-flat-button color="primary" href="https://github.com/AdvancedProductivity/DataBus-Etl" target="_blank">
+        <img style="margin-top: -5px" width="24px" height="24px" src="/assets/svg/github-circle-white-transparent.svg"
+             alt="angular" class="docs-angular-logo">
+        &nbsp;&nbsp;GitHub
+      </a>
     </mat-toolbar-row>
   </mat-toolbar>
   <div style="width: 100%;height: 100%;position: relative">
