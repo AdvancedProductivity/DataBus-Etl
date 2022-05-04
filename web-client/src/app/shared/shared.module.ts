@@ -18,7 +18,7 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {MatMenuModule} from "@angular/material/menu";
-
+import {MatTableModule} from '@angular/material/table';
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,8 +31,10 @@ export function createTranslateLoader(http: HttpClient) {
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    FormsModule,
     MatMenuModule,
     LayoutModule,
+    MatTableModule,
     HttpClientModule,
     MatToolbarModule,
     TranslateModule.forRoot({
@@ -65,9 +67,11 @@ export function createTranslateLoader(http: HttpClient) {
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
+    FormsModule,
     MatSidenavModule,
     MatIconModule,
     NgScrollbarModule,
+    MatTableModule,
     NgProgressModule,
     NgProgressHttpModule,
     NgProgressRouterModule,
