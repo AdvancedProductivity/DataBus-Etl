@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -62,6 +63,6 @@ public class RequestParamToJson {
             final Map<String, MultipartFile> fileMap = r.getFileMap();
             return fileMap;
         }
-        return null;
+        return Collections.emptyMap();
     }
 }

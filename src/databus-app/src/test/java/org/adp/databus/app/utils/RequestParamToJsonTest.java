@@ -7,10 +7,7 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
@@ -39,6 +36,19 @@ public class RequestParamToJsonTest {
         assertEquals(3, jsonNodes.path("asd").size());
         assertTrue(jsonNodes.path("b").isTextual());
         assertTrue(StringUtils.isEmpty(jsonNodes.path("c").asText()));
+    }
+
+    @Test
+    public void testNoFileToMap() {
+        assertNull(RequestParamToJson.reqToJson(null, null));
+        final MockHttpServletRequest req = MockMvcRequestBuilders.get("/sad")
+                .param("asd", "0", "1", "2")
+                .param("b", "2")
+                .param("c", "")
+                .buildRequest(null);
+        final Map<String, MultipartFile> fileMap = RequestParamToJson.reqFileToMap(req);
+        assertNotNull(fileMap);
+        assertEquals(0, fileMap.size());
     }
 
     @Test

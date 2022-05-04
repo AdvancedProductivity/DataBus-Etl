@@ -83,6 +83,8 @@ public class TestHomeTest {
                             MockMvcRequestBuilders.multipart("/api/test")
                                     .file(file0)
                                     .file(file1)
+                                    .param("someparam1", String.valueOf(true))
+                                    .param("someparam2", String.valueOf(false))
                                     .accept(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(MockMvcResultMatchers.status().isOk())

@@ -46,8 +46,10 @@ public class HomeTest {
 
     @PostMapping
     public ObjectNode postFile(HttpServletRequest request) {
+        final ObjectNode jsonNodes = RequestParamToJson.reqToJson(request, objectMapper);
         final Map<String, MultipartFile> stringMultipartFileMap = RequestParamToJson.reqFileToMap(request);
         return objectMapper
-                .createObjectNode().put("count", stringMultipartFileMap.size());
+                .createObjectNode().put("count", stringMultipartFileMap.size()).set("con", jsonNodes);
     }
+
 }
