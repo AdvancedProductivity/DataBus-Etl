@@ -8,20 +8,27 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.HeaderResultMatchers;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasToString;
@@ -53,7 +60,7 @@ public class TestHomeTest {
                                     .accept(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andDo(MockMvcResultHandlers.log())
+                    .andDo(MockMvcResultHandlers.print())
                     .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
             final MockHttpServletResponse response = mvcResult.getResponse();
@@ -62,6 +69,56 @@ public class TestHomeTest {
             assertTrue(jsonNode.has("data"));
             assertTrue(jsonNode.path("data").isTextual());
             assertEquals(jsonNode.path("data").asText().length(), 10);
+        });
+    }
+
+    @Test()
+    public void testPostFile() {
+        assertDoesNotThrow(() -> {
+            MockMultipartFile file0 = new MockMultipartFile("file0",
+                    "testContext".getBytes(StandardCharsets.UTF_8));
+            MockMultipartFile file1 = new MockMultipartFile("file1",
+                    "testContext".getBytes(StandardCharsets.UTF_8));
+            final MvcResult mvcResult = mockMvc.perform(
+                            MockMvcRequestBuilders.multipart("/api/test")
+                                    .file(file0)
+                                    .file(file1)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
+
+            final MockHttpServletResponse response = mvcResult.getResponse();
+            final String contentAsString = response.getContentAsString();
+            final JsonNode jsonNode = objectMapper.readTree(contentAsString);
+            assertEquals(2, jsonNode.path("count").asInt());
+        });
+    }
+
+
+    @Test()
+    public void testQuery() {
+        assertNotNull(mockMvc, "Spring Context not null");
+        assertDoesNotThrow(() -> {
+            final LinkedMultiValueMap<String, String> linkedMultiValueMap = new LinkedMultiValueMap<String, String>();
+            linkedMultiValueMap.put("a", Collections.singletonList("10"));
+            linkedMultiValueMap.put("b", Arrays.asList("1,2,3", "po"));
+            final MvcResult mvcResult = mockMvc.perform(
+                            MockMvcRequestBuilders.get("/api/test/query")
+                                    .queryParams(linkedMultiValueMap)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
+
+            final MockHttpServletResponse response = mvcResult.getResponse();
+            final String contentAsString = response.getContentAsString();
+            final JsonNode jsonNode = objectMapper.readTree(contentAsString);
+            assertEquals(2, jsonNode.path("count").asInt());
         });
     }
 
