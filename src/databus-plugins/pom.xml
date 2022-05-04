@@ -104,8 +104,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.walltech.etower</groupId>
-            <artifactId>etower-export-plugin-api</artifactId>
+            <groupId>org.adp</groupId>
+            <artifactId>databus.api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
