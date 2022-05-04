@@ -2,4 +2,5 @@ databus:
   appName: DataBus
   databaseFileName: databus.sqlite
   configFileName: config.json
-
+server:
+  port: 2205
