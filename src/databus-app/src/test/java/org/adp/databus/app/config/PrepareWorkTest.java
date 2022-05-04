@@ -6,7 +6,7 @@ import org.adp.databus.app.mapper.TestTableMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -155,5 +155,11 @@ public class PrepareWorkTest {
             assertEquals(nameA, testTables.get(1).getName());
 
         });
+    }
+
+    @After
+    public void clearData() {
+        final int delete = testTableMapper.delete(new QueryWrapper<TestTable>().lambda().apply("1=1"));
+        logger.info("delete data count: {}", delete);
     }
 }
