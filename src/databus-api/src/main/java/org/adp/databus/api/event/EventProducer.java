@@ -17,5 +17,5 @@ public interface EventProducer {
      * @param topic data type
      * @return result
      */
-    boolean produceEvent(String topic, JsonNode data);
+    boolean produceEvent(DataBusEventTopic topic, JsonNode data);
 }

@@ -3,11 +3,17 @@ package org.adp.databus.api.event;
 /**
  * @author zzq
  */
-public interface DataBusEventTopic {
+public enum DataBusEventTopic {
 
     /**
      * the topic of the system's notify in the web home page
      */
-    String SYSTEM_NOTIFY_TOPIC = "SYSTEM_NOTIFY";
+    SYSTEM_NOTIFY_TOPIC,
+
+    /**
+     * plugin start running
+     */
+    PLUGIN_START,
+    ;
 
 }

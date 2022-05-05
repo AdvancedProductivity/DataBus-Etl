@@ -25,14 +25,6 @@ public interface OperationHelper {
      */
     String getConfigExample();
 
-
-    /**
-     * set the event publish
-     *
-     * @param producer method
-     */
-    void setEventPublish(EventProducer producer);
-
     /**
      * get a location to save file(maybe tmp file)
      *
