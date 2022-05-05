@@ -1,0 +1,19 @@
+[
+  {
+    "id": "demo_csv_random_file",
+    "name": "zzq",
+    "description": "随机生成字符串csv文件,配置计算逻辑",
+    "releases": [
+      {
+        "version": "1.0.0",
+        "date": "2022-03-22",
+        "url": "demo_csv_random_file/1.0.0/d240be02-38a7-4a64-9f47-26fc89a67290.jar"
+      },
+      {
+        "version": "1.0.1",
+        "date": "2022-03-22",
+        "url": "demo_csv_random_file/1.0.1/43cbd29a-f55a-4d0e-b110-2898a0245dc3.jar"
+      }
+    ]
+  }
+]
