@@ -25,8 +25,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <pf4j-update.version>2.4.0-SNAPSHOT</pf4j-update.version>
-        <pf4j-spring.version>0.8.0-SNAPSHOT</pf4j-spring.version>
+        <pf4j-update.version>2.3.0</pf4j-update.version>
+        <pf4j-spring.version>0.7.0</pf4j-spring.version>
     </properties>
 
     <dependencyManagement>
