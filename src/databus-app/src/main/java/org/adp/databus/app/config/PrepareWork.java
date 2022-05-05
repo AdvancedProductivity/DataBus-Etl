@@ -75,20 +75,6 @@ public class PrepareWork {
         } else {
             logger.info("database file have exist,do not need created new");
         }
-        final File file = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_FILE_LOCATION);
-        if (!file.exists()) {
-            logger.info("create plugin folder");
-            file.mkdirs();
-        }
-        final File pluginRepoDefineFile = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_REPOSITORY_LOCATION);
-        if (!pluginRepoDefineFile.exists()) {
-            logger.info("create plugin repo json config file");
-            try {
-                FileUtils.write(pluginRepoDefineFile, "[]", StandardCharsets.UTF_8);
-            } catch (Exception e) {
-                logger.error("create plugin repo json config file error", e);
-            }
-        }
     }
 
     private void createDatabaseFile(String userDirectoryPath, File databaseFile) {

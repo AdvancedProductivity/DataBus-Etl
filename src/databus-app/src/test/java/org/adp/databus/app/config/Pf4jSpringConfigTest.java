@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,10 +21,26 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Pf4jSpringConfigTest {
 
     @Resource
+    private Pf4jSpringConfig pf4jSpringConfig;
+
+    @Resource
     private UpdateManager updateManager;
 
     @Resource
     private SpringPluginManager springPluginManager;
+
+    @Test
+    public void testGetValue() {
+        assertNotNull(pf4jSpringConfig);
+        assertDoesNotThrow(() -> {
+            Field field = Pf4jSpringConfig.class.getDeclaredField("remoteUri");
+            field.setAccessible(true);
+            final Object o = field.get(pf4jSpringConfig);
+            assertNotNull(o);
+            assertTrue(o instanceof String);
+            assertEquals("local", o);
+        });
+    }
 
     @Test
     public void testGetPlugin() {
@@ -37,14 +54,12 @@ public class Pf4jSpringConfigTest {
 
         for (PluginInfo plugin : plugins) {
             final PluginWrapper plugin1 = springPluginManager.getPlugin(plugin.id);
-            System.out.println(plugin1.getPluginState().toString());
+            assertNull(plugin1);
         }
         System.out.println(plugins.size());
         final List<PluginInfo> updates = updateManager.getUpdates();
         assertNotNull(updates);
         System.out.println(updates.size());
-
-
     }
 
 }

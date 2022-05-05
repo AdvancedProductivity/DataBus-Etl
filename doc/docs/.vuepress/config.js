@@ -1,4 +1,5 @@
 module.exports = {
+    port: 3005,
     dest: '../docs',
     base: '/DataBus-Etl/',
     lang: 'zh-CN',
