@@ -2,6 +2,8 @@ databus:
   appName: DataBus
   databaseFileName: databus.sqlite
   configFileName: config.json
-  remoteUri: https://advancedproductivity.github.io/DataBus-Etl/PluginRepo/plugins.json
+  repositories: repositories.json
+  pluginLocation: PluginFolder
+  remoteRespUri: https://advancedproductivity.github.io/DataBus-Etl/PluginRepo/plugins.json
 server:
   port: 2205

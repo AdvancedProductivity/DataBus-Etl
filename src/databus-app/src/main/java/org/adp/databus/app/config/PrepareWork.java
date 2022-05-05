@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
@@ -32,12 +33,19 @@ import java.util.List;
 public class PrepareWork {
     private static final Logger logger = LoggerFactory.getLogger(PrepareWork.class);
 
+    @Resource
+    private DataBusConst dataBusConst;
+
     @Bean
     public DataSource dataSource() {
         initFileBeforeDataSourceBuild();
         logger.info("init data source");
         HikariConfig config = new HikariConfig();
-        String jdbcUrl = "jdbc:sqlite://" + FileUtils.getUserDirectoryPath() + File.separator + DataBusConst.APPLICATION_NAME + File.separator + DataBusConst.DATA_BUS_FILE_NAME;
+        String jdbcUrl = "jdbc:sqlite://" + FileUtils.getUserDirectoryPath()
+                + File.separator
+                + dataBusConst.applicationName
+                + File.separator
+                + dataBusConst.dataBusFileName;
         logger.info("connect the jdbc: {}", jdbcUrl);
         config.setJdbcUrl(jdbcUrl);
         config.setDriverClassName("org.sqlite.JDBC");
@@ -69,7 +77,11 @@ public class PrepareWork {
         logger.info("zzq see application start");
         final String userDirectoryPath = FileUtils.getUserDirectoryPath();
         logger.info("zzq see the path is {}", userDirectoryPath);
-        File databaseFile = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.DATA_BUS_FILE_NAME);
+        File databaseFile = FileUtils.getFile(
+                userDirectoryPath,
+                dataBusConst.applicationName,
+                dataBusConst.dataBusFileName
+        );
         if (!databaseFile.exists()) {
             createDatabaseFile(userDirectoryPath, databaseFile);
         } else {

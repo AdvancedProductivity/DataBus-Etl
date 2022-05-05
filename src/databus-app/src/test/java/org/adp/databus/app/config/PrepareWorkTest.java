@@ -6,6 +6,7 @@ import org.adp.databus.app.mapper.TestTableMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,15 +43,31 @@ public class PrepareWorkTest {
     private DataSource dataSource;
 
     @Resource
+    private DataBusConst dataBusConst;
+
+    @Resource
     private TestTableMapper testTableMapper;
 
 
     private static Logger logger = LoggerFactory.getLogger(PrepareWorkTest.class);
 
     @Test
+    public void testDataBusConst() {
+        assertNotNull(dataBusConst);
+        assertNotNull(dataBusConst.pluginRespFolderLocation);
+        assertNotNull(DataBusConst.USER_DIR);
+        assertTrue(StringUtils.isNotEmpty(DataBusConst.USER_DIR));
+        assertTrue(StringUtils.isNotEmpty(dataBusConst.pluginRespFolderLocation));
+    }
+
+    @Test
     public void testEvent() {
-        String userDirectoryPath = FileUtils.getUserDirectoryPath();
-        File databaseFile = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.DATA_BUS_FILE_NAME);
+        String userDirectoryPath = DataBusConst.USER_DIR;
+        File databaseFile = FileUtils.getFile(
+                userDirectoryPath,
+                dataBusConst.applicationName,
+                dataBusConst.dataBusFileName
+        );
         assertNotNull(databaseFile);
         assertTrue(databaseFile.exists() && databaseFile.isFile());
     }

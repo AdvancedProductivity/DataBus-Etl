@@ -1,13 +1,33 @@
 package org.adp.databus.app.config;
 
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
 /**
  * @author zzq
  */
-public interface DataBusConst {
-    String APPLICATION_NAME = "DataBus";
-    String DATA_BUS_FILE_NAME = "databus.sqlite";
-    String APPLICATION_CONFIG_NAME = "config.json";
-    String PLUGIN_FILE_LOCATION = "PluginFolder";
+@Configuration
+public class DataBusConst {
 
-    String PLUGIN_REPOSITORY_LOCATION = "repositories.json";
+    public static String USER_DIR = FileUtils.getUserDirectoryPath();
+
+    @Value("${databus.appName:DataBus}")
+    public String applicationName;
+
+    @Value("${databus.databaseFileName:databus.sqlite}")
+    public String dataBusFileName;
+
+    @Value("${databus.configFileName:config.json}")
+    public String applicationConfigName;
+
+    @Value("${databus.pluginLocation:PluginFolder}")
+    public String pluginInstallLocationFileName;
+
+    @Value("${databus.repositories:repositories.json}")
+    public String pluginRespFolderLocation;
+
+    @Value("${databus.remoteRespUri:http://localhost:3005/DataBus-Etl/PluginRepo/plugins.json}")
+    public String remoteRespUri;
 }

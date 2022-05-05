@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
@@ -20,41 +21,47 @@ import java.nio.charset.StandardCharsets;
  * @author zzq
  */
 @Configuration
-@DependsOn("dataSource")
+@DependsOn(value = "dataSource")
 public class Pf4jSpringConfig {
     private static Logger logger = LoggerFactory.getLogger(Pf4jSpringConfig.class);
 
-    @Value("${databus.remoteUri}")
-    private String remoteUri;
+    @Resource
+    private DataBusConst dataBusConst;
 
     private static SpringPluginManager MANAGER;
-    private static final String userDirectoryPath;
-
-    static {
-        logger.info("start set plugin manager");
-        userDirectoryPath = FileUtils.getUserDirectoryPath();
-    }
 
     @Bean
     public SpringPluginManager pluginManager() {
         checkFile();
-        logger.info("the remote plugin uri is: {}", remoteUri);
+        logger.info("the remote plugin uri is: {}", dataBusConst.remoteRespUri);
         logger.info("add pf4j spring manager");
         if (MANAGER == null) {
             MANAGER = new SpringPluginManager(
-                    FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_FILE_LOCATION).toPath()
+                    FileUtils.getFile(
+                            DataBusConst.USER_DIR,
+                            dataBusConst.applicationName,
+                            dataBusConst.pluginInstallLocationFileName
+                    ).toPath()
             );
         }
         return MANAGER;
     }
 
     private void checkFile() {
-        final File file = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_FILE_LOCATION);
+        final File file = FileUtils.getFile(
+                DataBusConst.USER_DIR,
+                dataBusConst.applicationName,
+                dataBusConst.pluginInstallLocationFileName
+        );
         if (!file.exists()) {
             logger.info("create plugin folder");
             file.mkdirs();
         }
-        final File pluginRepoDefineFile = FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_REPOSITORY_LOCATION);
+        final File pluginRepoDefineFile = FileUtils.getFile(
+                DataBusConst.USER_DIR,
+                dataBusConst.applicationName,
+                dataBusConst.pluginRespFolderLocation
+        );
         if (!pluginRepoDefineFile.exists()) {
             logger.info("create plugin repo json config file");
             try {
@@ -70,7 +77,11 @@ public class Pf4jSpringConfig {
     public UpdateManager updateManager() {
         logger.info("add pf4j update manager");
         return new UpdateManager(MANAGER,
-                FileUtils.getFile(userDirectoryPath, DataBusConst.APPLICATION_NAME, DataBusConst.PLUGIN_REPOSITORY_LOCATION).toPath()
+                FileUtils.getFile(
+                        DataBusConst.USER_DIR,
+                        dataBusConst.applicationName,
+                        dataBusConst.pluginRespFolderLocation
+                ).toPath()
         );
     }
 
