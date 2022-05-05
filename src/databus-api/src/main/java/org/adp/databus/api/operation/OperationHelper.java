@@ -39,4 +39,11 @@ public interface OperationHelper {
      * @param fileDir file location
      */
     void setBaseFileDir(String fileDir);
+
+    /**
+     * modify the component name
+     *
+     * @return component name
+     */
+    String getComponentName();
 }
