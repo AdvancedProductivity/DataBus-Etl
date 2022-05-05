@@ -1,5 +1,8 @@
 package org.adp.databus.app.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.commons.io.FileUtils;
 import org.pf4j.spring.SpringPluginManager;
 import org.pf4j.update.UpdateManager;
@@ -27,6 +30,9 @@ public class Pf4jSpringConfig {
 
     @Resource
     private DataBusConst dataBusConst;
+
+    @Resource
+    private ObjectMapper objectMapper;
 
     private static SpringPluginManager MANAGER;
 
@@ -60,16 +66,35 @@ public class Pf4jSpringConfig {
         final File pluginRepoDefineFile = FileUtils.getFile(
                 DataBusConst.USER_DIR,
                 dataBusConst.applicationName,
-                dataBusConst.pluginRespFolderLocation
+                dataBusConst.pluginRespFolderDefine
         );
         if (!pluginRepoDefineFile.exists()) {
             logger.info("create plugin repo json config file");
             try {
-                FileUtils.write(pluginRepoDefineFile, "[]", StandardCharsets.UTF_8);
+                final ArrayNode arrayNode = objectMapper.createArrayNode();
+                arrayNode.add(genResp(DataBusConst.RESP_REMOTE, dataBusConst.remoteRespUri));
+                arrayNode.add(genResp(DataBusConst.RESP_LOCAL,
+                                DataBusConst.RESP_LOCATION_PREFIX
+                                        + DataBusConst.USER_DIR
+                                        + File.separator
+                                        + dataBusConst.applicationName
+                                        + File.separator
+                                        + dataBusConst.pluginRespLocationFileName
+                                        + File.separator
+                        )
+                );
+                FileUtils.write(pluginRepoDefineFile, arrayNode.toPrettyString(), StandardCharsets.UTF_8);
             } catch (Exception e) {
                 logger.error("create plugin repo json config file error", e);
             }
         }
+    }
+
+    private JsonNode genResp(String id, String url) {
+        return objectMapper
+                .createObjectNode()
+                .put(DataBusConst.ID, id)
+                .put(DataBusConst.URL, url);
     }
 
     @Bean
@@ -80,7 +105,7 @@ public class Pf4jSpringConfig {
                 FileUtils.getFile(
                         DataBusConst.USER_DIR,
                         dataBusConst.applicationName,
-                        dataBusConst.pluginRespFolderLocation
+                        dataBusConst.pluginRespFolderDefine
                 ).toPath()
         );
     }

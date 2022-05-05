@@ -1,5 +1,8 @@
 package org.adp.databus.app.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.pf4j.PluginWrapper;
@@ -11,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -21,6 +25,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Pf4jSpringConfigTest {
 
     @Resource
+    private ObjectMapper objectMapper;
+
+    @Resource
     private Pf4jSpringConfig pf4jSpringConfig;
 
     @Resource
@@ -28,6 +35,29 @@ public class Pf4jSpringConfigTest {
 
     @Resource
     private SpringPluginManager springPluginManager;
+
+    @Resource
+    private DataBusConst dataBusConst;
+
+    @Test
+    public void testRespFileGen() {
+        final File file = FileUtils.getFile(
+                DataBusConst.USER_DIR,
+                dataBusConst.applicationName,
+                dataBusConst.pluginRespFolderDefine
+        );
+        assertNotNull(file);
+        assertTrue(file.exists());
+        assertDoesNotThrow(() -> {
+            final JsonNode jsonNode = objectMapper.readTree(file);
+            assertTrue(jsonNode.isArray());
+            assertEquals(2, jsonNode.size());
+            for (JsonNode node : jsonNode) {
+                assertTrue(node.has(DataBusConst.ID));
+                assertTrue(node.has(DataBusConst.URL));
+            }
+        });
+    }
 
     @Test
     public void testGetValue() {

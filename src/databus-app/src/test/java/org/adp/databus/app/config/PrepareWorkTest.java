@@ -54,10 +54,10 @@ public class PrepareWorkTest {
     @Test
     public void testDataBusConst() {
         assertNotNull(dataBusConst);
-        assertNotNull(dataBusConst.pluginRespFolderLocation);
+        assertNotNull(dataBusConst.pluginRespFolderDefine);
         assertNotNull(DataBusConst.USER_DIR);
         assertTrue(StringUtils.isNotEmpty(DataBusConst.USER_DIR));
-        assertTrue(StringUtils.isNotEmpty(dataBusConst.pluginRespFolderLocation));
+        assertTrue(StringUtils.isNotEmpty(dataBusConst.pluginRespFolderDefine));
     }
 
     @Test

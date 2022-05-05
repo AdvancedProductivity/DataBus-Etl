@@ -3,7 +3,8 @@ databus:
   databaseFileName: databus.sqlite
   configFileName: config.json
   repositories: repositories.json
-  pluginLocation: PluginFolder
+  pluginInstallLocation: PluginFolder
+  pluginRespLocation: PluginRepo
   remoteRespUri: http://localhost:3005/DataBus-Etl/PluginRepo/plugins.json
 server:
   port: 2205
