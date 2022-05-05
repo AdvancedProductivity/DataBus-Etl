@@ -32,4 +32,11 @@ public interface OperationHelper {
      * @param producer method
      */
     void setEventPublish(EventProducer producer);
+
+    /**
+     * get a location to save file(maybe tmp file)
+     *
+     * @param fileDir file location
+     */
+    void setBaseFileDir(String fileDir);
 }
