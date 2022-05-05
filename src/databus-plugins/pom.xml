@@ -10,8 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>databus-plugins</artifactId>
+    <packaging>pom</packaging>
 
     <modules>
+        <module>random-data-generate</module>
     </modules>
 
     <properties>
