@@ -8,3 +8,6 @@ databus:
   remoteRespUri: https://advancedproductivity.github.io/DataBus-Etl/PluginRepo/plugins.json
 server:
   port: 2205
+spring:
+  quartz:
+    job-store-type: memory
