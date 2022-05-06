@@ -1,5 +1,6 @@
 databus:
   appName: DataBus
+  fileLocation: file
   databaseFileName: databus.sqlite
   configFileName: config.json
   repositories: repositories.json

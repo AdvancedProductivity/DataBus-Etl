@@ -36,6 +36,9 @@ public class DataBusConst {
     @Value("${databus.repositories:repositories.json}")
     public String pluginRespFolderDefine;
 
+    @Value("${databus.fileLocation:fileLocation}")
+    public String fileLocation;
+
     @Value("${databus.remoteRespUri:http://localhost:3005/DataBus-Etl/PluginRepo/plugins.json}")
     public String remoteRespUri;
 }
