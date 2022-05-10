@@ -25,7 +25,7 @@ public class TriggerGenerate {
 
     private static final Logger log = LoggerFactory.getLogger(TriggerGenerate.class);
 
-    private static final AtomicInteger jobCount = new AtomicInteger(0);
+    private static final AtomicInteger JOB_COUNT = new AtomicInteger(0);
     
     @Resource
     private StdScheduler quartzScheduler;
@@ -42,7 +42,7 @@ public class TriggerGenerate {
             return result.put("error", "have no scheduler");
         }
         CronTrigger trigger = createCronTrigger(
-                "job_" + jobCount.incrementAndGet()
+                "job_" + JOB_COUNT.incrementAndGet()
                 , new Date()
                 , cron
                 , CronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING
